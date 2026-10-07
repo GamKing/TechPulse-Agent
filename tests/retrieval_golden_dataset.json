@@ -1,0 +1,127 @@
+[
+  {
+    "query": "佩蕾丝技术资本周期下AI芯片处于安装期还是展开期？",
+    "expected_topic": "佩蕾丝技术资本周期"
+  },
+  {
+    "query": "新技术刚出来大家疯狂跟风砸钱，泡沫破了但路网基建留下来了",
+    "expected_topic": "佩蕾丝技术资本周期"
+  },
+  {
+    "query": "数字革命处于资本周期导入期还是展开期",
+    "expected_topic": "佩蕾丝技术资本周期"
+  },
+  {
+    "query": "闪电战局部优势竞争策略如何应用在科技产业？",
+    "expected_topic": "兰切斯特法则"
+  },
+  {
+    "query": "以弱胜强集中优势兵力打穿细分市场",
+    "expected_topic": "兰切斯特法则"
+  },
+  {
+    "query": "小公司怎么以小博大，找个细分切口集中火力打穿巨头？",
+    "expected_topic": "兰切斯特法则"
+  },
+  {
+    "query": "芯片产业链双链拓扑与控制点分析，谁掌握话语权？",
+    "expected_topic": "双链拓扑与控制点"
+  },
+  {
+    "query": "产业链控制点与赢家集团分析",
+    "expected_topic": "双链拓扑与控制点"
+  },
+  {
+    "query": "卡脖子关键环节谁掌握议价权",
+    "expected_topic": "双链拓扑与控制点"
+  },
+  {
+    "query": "人形机器人行星滚柱丝杠良品率与莱特定律降本速度",
+    "expected_topic": "莱特定律与学习曲线"
+  },
+  {
+    "query": "良品率爬坡与学习曲线降本",
+    "expected_topic": "莱特定律与学习曲线"
+  },
+  {
+    "query": "规模化量产成本下降规律",
+    "expected_topic": "莱特定律与学习曲线"
+  },
+  {
+    "query": "硬件平台应用三级扩散时序，当前AI处于哪一层？",
+    "expected_topic": "三级扩散时序"
+  },
+  {
+    "query": "硬件基础设施先行应用后爆发",
+    "expected_topic": "三级扩散时序"
+  },
+  {
+    "query": "基础设施到应用的扩散时序",
+    "expected_topic": "三级扩散时序"
+  },
+  {
+    "query": "高利率环境下成长股估值重估与现金流配置",
+    "expected_topic": "高利率与现金流重估"
+  },
+  {
+    "query": "利率上升压制成长股估值",
+    "expected_topic": "高利率与现金流重估"
+  },
+  {
+    "query": "加息周期估值重估",
+    "expected_topic": "高利率与现金流重估"
+  },
+  {
+    "query": "达利奥债务周期下美国本币债务风险与避险资产配置",
+    "expected_topic": "达利奥债务周期与避险"
+  },
+  {
+    "query": "俄乌冲突与地缘黑天鹅引发的避险需求是暴跌还是黄金坑",
+    "expected_topic": "达利奥债务周期与避险"
+  },
+  {
+    "query": "债务周期见顶去杠杆风险",
+    "expected_topic": "达利奥债务周期与避险"
+  },
+  {
+    "query": "台积电先进封装良品率爬坡对主控芯片成本的影响",
+    "expected_fact_ids": [
+      "TSMC-2026Q3-COWOS-YIELD",
+      "TSMC-2027-COWOS-CAPACITY"
+    ]
+  },
+  {
+    "query": "台积电CoWoS封装产能对芯片BOM降本的支撑",
+    "expected_fact_ids": [
+      "TSMC-2027-COWOS-CAPACITY"
+    ]
+  },
+  {
+    "query": "技术范式转移的时代趋势",
+    "expected_topic": "创新地图与时代趋势"
+  },
+  {
+    "query": "创新地图看新一轮工业革命",
+    "expected_topic": "创新地图与时代趋势"
+  },
+  {
+    "query": "百年变局的技术驱动",
+    "expected_topic": "创新地图与时代趋势"
+  },
+  {
+    "query": "生态缺一块短板就不成立",
+    "expected_topic": "新木桶与生态协调"
+  },
+  {
+    "query": "长板协作生态共赢",
+    "expected_topic": "新木桶与生态协调"
+  },
+  {
+    "query": "新产品渗透率爬坡的习惯形成",
+    "expected_topic": "行为习惯观念三阶段"
+  },
+  {
+    "query": "从尝鲜到习惯的新技术",
+    "expected_topic": "行为习惯观念三阶段"
+  }
+]

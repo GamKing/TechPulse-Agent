@@ -1,0 +1,1255 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "pipeline_name": "Frontier Tech Industrial Analysis Engine - Decoupled Architecture & Multi-Pipeline Router",
+  "version": "4.0.0",
+  "description": "基于问题分类（技术可行性、产业拓扑、科技企业估值）动态分流专业化模型与专属认知管线的决策投研系统",
+  "problem_router": {
+    "enabled": true,
+    "retrieval": {
+      "semantic": false,
+      "llm_normalize": false,
+      "comment": "P1-2 统一检索配置（经 settings.py 单一入口读取，供消融实验/A-B 配置化调参）。默认全关保持纯离线确定性；开启需本地 Ollama 在线，离线自动降级。",
+      "weights": {
+        "topic_overlap": 3.0,
+        "keyword_hit": 1.5,
+        "keyword_broad": 0.5,
+        "skill_overlap": 1.2,
+        "micro_fact": 2.0,
+        "topic_suppress_micro": 0.4,
+        "comment": "检索打分权重：主题命中/关键词命中/宽泛词降权/技能重合/微观事实加权/主题抑制系数"
+      },
+      "endpoints": {
+        "embed_api": "http://127.0.0.1:22434/api/embed",
+        "llm_api_base": "http://127.0.0.1:22434/v1",
+        "embed_model": "nomic-embed-text",
+        "llm_model": "qwen2.5-benchmark",
+        "comment": "本地 Ollama 端点（embedding 与 LLM 规范化共用）"
+      }
+    },
+    "classification_categories": [
+      {
+        "category": "TECH_FEASIBILITY",
+        "name_zh": "技术可行性与量产突破",
+        "description": "聚焦底层物理/算法原理、实验室0到1突破、1到100万工程调优、硬指标临界点对标、莱特定律学习曲线与学术师承树。",
+        "pipeline_ref": "tech_pipeline",
+        "keywords": [
+          "技术",
+          "原理",
+          "算法",
+          "良品率",
+          "良率",
+          "公差",
+          "工程调优",
+          "量产",
+          "实验室",
+          "学术树",
+          "硬指标",
+          "临界点",
+          "MTBF",
+          "莱特定律",
+          "学习率",
+          "BOM",
+          "执行器",
+          "丝杠",
+          "减速器",
+          "散热",
+          "芯片",
+          "参数",
+          "公式",
+          "科技制造",
+          "科技制造家",
+          "工程集成",
+          "小单快反",
+          "量产阵痛",
+          "爬坡",
+          "交付排队",
+          "异构计算",
+          "机器智商",
+          "脑力替代",
+          "流程自动化",
+          "rpa",
+          "人效倍增",
+          "长板协作",
+          "系统总包"
+        ]
+      },
+      {
+        "category": "INDUSTRY_TOPOLOGY",
+        "name_zh": "中观产业拓扑与宏观大周期",
+        "description": "聚焦卡洛塔·佩蕾丝50年革命大周期、中观产业链双链拓扑与控制点、赢家集团矩阵、跨市场制度转换与全球积木式出海。",
+        "pipeline_ref": "industry_pipeline",
+        "keywords": [
+          "产业",
+          "大周期",
+          "渗透率",
+          "产业链",
+          "拓扑",
+          "控制点",
+          "赢家集团",
+          "制度转换",
+          "出海",
+          "全球化",
+          "积木式创新",
+          "卡洛塔",
+          "中立节点",
+          "双链",
+          "地缘政治",
+          "SPAC",
+          "趋势",
+          "格局",
+          "展开期",
+          "导入期",
+          "高利率",
+          "现金流重估",
+          "三级扩散",
+          "扩散时序",
+          "云原生",
+          "佩蕾丝",
+          "敏捷供应链",
+          "小单快反",
+          "科技制造家",
+          "生态繁荣",
+          "长板协作",
+          "总包控制点",
+          "集成商",
+          "反全包",
+          "行为改变",
+          "习惯改变",
+          "观念改变",
+          "文化出海",
+          "长雪道"
+        ]
+      },
+      {
+        "category": "COMPANY_VALUATION",
+        "name_zh": "科技企业诊断与估值解耦",
+        "description": "聚焦科技企业全生命周期五维价值、CEO决断力与团队基因、三层产品架构、服务规模化(RaaS/AIGS)、法定财报事实审计与逆向隐含预期测算。",
+        "pipeline_ref": "company_pipeline",
+        "keywords": [
+          "估值",
+          "企业",
+          "公司",
+          "财报",
+          "营收",
+          "毛利",
+          "PE",
+          "PS",
+          "股票",
+          "团队",
+          "CEO",
+          "空降高管",
+          "瓦特",
+          "伯顿",
+          "商业模式",
+          "订阅",
+          "RaaS",
+          "AIGS",
+          "服务化",
+          "隐含预期",
+          "标的",
+          "投资",
+          "市值",
+          "双长制",
+          "超前信号",
+          "首席科学家",
+          "股权分配",
+          "高利率重估",
+          "量产阵痛",
+          "产线节拍",
+          "软硬解耦",
+          "低PE陷阱",
+          "机器智商",
+          "脑力替代",
+          "1人带多机",
+          "高端服务平民化",
+          "习惯改变",
+          "观念改变",
+          "长板协作",
+          "总包控制力"
+        ]
+      },
+      {
+        "category": "MACRO_POLICY_REGULATION",
+        "name_zh": "宏观地缘、政策合规与制度准入",
+        "description": "聚焦地缘政治进出口管制、跨境支付方/劳动力/牌照四维制度转换、文化滞后阻力与中立节点(新加坡/迪拜)借道出海。",
+        "pipeline_ref": "policy_pipeline",
+        "keywords": [
+          "政策",
+          "法规",
+          "监管",
+          "管制",
+          "出口管制",
+          "关税",
+          "地缘政治",
+          "合规",
+          "准入",
+          "牌照",
+          "红旗法案",
+          "文化滞后",
+          "制度转换",
+          "中立节点",
+          "新加坡",
+          "迪拜",
+          "出海合规",
+          "大资本利益",
+          "聪明的互惠",
+          "选举口水",
+          "跨国企业公民",
+          "全球制造",
+          "德州模式",
+          "工作权",
+          "学区减免",
+          "产缘政治",
+          "大国博弈",
+          "中美博弈"
+        ]
+      },
+      {
+        "category": "INTELLIGENCE_SCOUTING",
+        "name_zh": "前沿科学溯源与反常情报侦察",
+        "description": "聚焦学术师承树(Academic Tree)溯源、科学家谱系真伪、社交网络(知乎/LinkedIn)一线工程师反常线索与“狗没有叫”异动信号。",
+        "pipeline_ref": "intelligence_pipeline",
+        "keywords": [
+          "学术树",
+          "师承",
+          "导师",
+          "论文溯源",
+          "科学家",
+          "八卦",
+          "反常信号",
+          "狗没有叫",
+          "知乎",
+          "吐槽",
+          "离职",
+          "寻与伺",
+          "真实线索",
+          "实验室真伪",
+          "学术源流"
+        ]
+      },
+      {
+        "category": "CAPITAL_TRANSACTION",
+        "name_zh": "资本运作、并购整合与交易架构",
+        "description": "聚焦SPAC上市催熟、制造即投资(以工程量产换股权)、战略投资三部曲(占位->合作->并购)与二级市场资本工具调度。",
+        "pipeline_ref": "capital_pipeline",
+        "keywords": [
+          "资本运作",
+          "SPAC",
+          "并购",
+          "收购",
+          "制造即投资",
+          "二股东",
+          "股权",
+          "天使占位",
+          "退出机制",
+          "PIPE",
+          "资本工具",
+          "上市催熟",
+          "市值管理",
+          "战略投资三部曲",
+          "高利率",
+          "双周期",
+          "现金流重估",
+          "低PE陷阱",
+          "价值陷阱",
+          "布朗运动",
+          "危机避险",
+          "避险资产",
+          "本币债务",
+          "债务危机",
+          "达利奥",
+          "黄金坑",
+          "大资本蓄水池"
+        ]
+      },
+      {
+        "category": "FULL_SYNTHESIS",
+        "name_zh": "全景产业与标的统筹综合",
+        "description": "跨越技术、产业与企业三层，执行 1+4+6 全景深度推演并输出完整基准产物与评分卡。",
+        "pipeline_ref": "full_synthesis_pipeline",
+        "keywords": [
+          "全景",
+          "全面分析",
+          "深度研报",
+          "1+4+6",
+          "综合",
+          "基准",
+          "评级",
+          "全维度"
+        ]
+      }
+    ]
+  },
+  "specialized_pipelines": {
+    "tech_pipeline": {
+      "pipeline_id": "tech_pipeline",
+      "target_domain": "TECH_FEASIBILITY",
+      "name_zh": "技术攻坚与工程调优专业管线",
+      "recommended_model_profile": {
+        "model_role": "Deep Technical Reasoning & Code/Math Engine",
+        "model_characteristics": "高深度思维链 (Deep CoT)、强数学复算能力、物理极限推理、代码与实验论文理解",
+        "example_models": [
+          "deepseek-reasoner (R1)",
+          "o1 / o3-mini",
+          "claude-3-7-sonnet (thinking: on)",
+          "pro"
+        ]
+      },
+      "active_skills": [
+        "commercialization-engineering",
+        "commercialization-timing",
+        "intelligence-scout",
+        "winning-strategy",
+        "tech-manufacturing-edge",
+        "diffusion-pipeline",
+        "ecosystem-coordination",
+        "machine-iq-automation"
+      ],
+      "mandatory_gates": [
+        "GATE_SOURCE_EXISTENCE",
+        "GATE_CLAIM_ENTAILMENT_TARGET_RESULT",
+        "GATE_PARAMETER_PROVENANCE_RECALCULATION",
+        "GATE_PARAMETER_ORTHOGONALITY_DUAL_MODEL"
+      ],
+      "primary_deliverable": "tech_readiness_card.json",
+      "core_metrics": [
+        "MTBF",
+        "Cycle Time",
+        "Yield Rate",
+        "Wright's Law LR%",
+        "Academic Tree Provenance"
+      ]
+    },
+    "industry_pipeline": {
+      "pipeline_id": "industry_pipeline",
+      "target_domain": "INDUSTRY_TOPOLOGY",
+      "name_zh": "中观产业拓扑与宏观大周期管线",
+      "recommended_model_profile": {
+        "model_role": "Macro Cycle & Meso Topology Strategic Engine",
+        "model_characteristics": "广域知识图谱检索、多主体博弈建模、全球贸易与制度分析、系统拓扑构建",
+        "example_models": [
+          "claude-3-7-sonnet",
+          "gpt-4o",
+          "gemini-1.5-pro",
+          "flash"
+        ]
+      },
+      "active_skills": [
+        "macro-tech-cycle-diagnostics",
+        "meso-industry-topology-control",
+        "tech-impact-trimode-evaluator",
+        "cross-market-institutional-translator",
+        "modular-innovation",
+        "trend-forecasting",
+        "evolution-rhyme",
+        "three-scalings",
+        "perez-capital-cycle",
+        "tech-manufacturing-edge",
+        "diffusion-pipeline",
+        "ecosystem-coordination",
+        "mindset-behavior-shift",
+        "geopolitical-deconstruction",
+        "global-corporate-citizen"
+      ],
+      "mandatory_gates": [
+        "GATE_SOURCE_EXISTENCE",
+        "GATE_EPISTEMIC_BIRTH_CERTIFICATE",
+        "GATE_CAUSAL_DISTANCE_PENALTY"
+      ],
+      "primary_deliverable": "industry_topology_report.md",
+      "core_metrics": [
+        "Supercycle Phase",
+        "Gatekeeping Node Exposure",
+        "Institutional Adaptation Score",
+        "Time Cone Milestones"
+      ]
+    },
+    "company_pipeline": {
+      "pipeline_id": "company_pipeline",
+      "target_domain": "COMPANY_VALUATION",
+      "name_zh": "科技企业事实审计与估值解耦管线",
+      "recommended_model_profile": {
+        "model_role": "Corporate Governance & Financial Valuation Engine",
+        "model_characteristics": "严谨结构化财报对齐、法定口径事实穿透、零情绪投资降温、反求逆向隐含预期模型",
+        "example_models": [
+          "claude-3-7-sonnet",
+          "gpt-4o",
+          "deepseek-chat",
+          "structured json engine"
+        ]
+      },
+      "active_skills": [
+        "stage-valuation",
+        "ceo-team-gene",
+        "micro-enterprise-focus-evaluator",
+        "business-design",
+        "traditional-upgrade",
+        "deductive-native",
+        "winning-strategy",
+        "bayesian-cognitive-map",
+        "dual-leader-governance",
+        "perez-capital-cycle",
+        "diffusion-pipeline",
+        "ecosystem-coordination",
+        "mindset-behavior-shift",
+        "machine-iq-automation",
+        "global-corporate-citizen"
+      ],
+      "mandatory_gates": [
+        "GATE_VALUATION_DECOUPLING",
+        "GATE_GLOBAL_PRECISION_REGEX_AUDIT",
+        "GATE_EPISTEMIC_BIRTH_CERTIFICATE"
+      ],
+      "primary_deliverable": "company_exposure_card.json",
+      "core_metrics": [
+        "Executive Retention >= 70%",
+        "Watt-Boulton Ratio",
+        "Statutory vs Broker Segment Revenue",
+        "Implied PE/Capex Elasticity"
+      ]
+    },
+    "policy_pipeline": {
+      "pipeline_id": "policy_pipeline",
+      "target_domain": "MACRO_POLICY_REGULATION",
+      "name_zh": "宏观地缘、政策合规与制度准入管线",
+      "recommended_model_profile": {
+        "model_role": "Geopolitical & Regulatory Institutional Analyst",
+        "model_characteristics": "跨法域政策比对、合规风险推演、制度摩擦度量化、中立出海合规架构",
+        "example_models": [
+          "claude-3-7-sonnet",
+          "gpt-4o",
+          "flash"
+        ]
+      },
+      "active_skills": [
+        "cross-market-institutional-translator",
+        "evolution-rhyme",
+        "modular-innovation",
+        "geopolitical-deconstruction",
+        "global-corporate-citizen"
+      ],
+      "mandatory_gates": [
+        "GATE_SOURCE_EXISTENCE",
+        "GATE_EPISTEMIC_BIRTH_CERTIFICATE"
+      ],
+      "primary_deliverable": "policy_compliance_card.json",
+      "core_metrics": [
+        "Institutional Friction Delta",
+        "Regulatory Adaptation Horizon",
+        "Tariff & License Exposure"
+      ]
+    },
+    "intelligence_pipeline": {
+      "pipeline_id": "intelligence_pipeline",
+      "target_domain": "INTELLIGENCE_SCOUTING",
+      "name_zh": "前沿科学溯源与反常情报侦察管线",
+      "recommended_model_profile": {
+        "model_role": "Deep Scientific Lineage & Anomalous Signal Scout",
+        "model_characteristics": "学术树图谱穿透、学术师承溯源、社交工程与水下八卦挖掘、反常离群信号定位",
+        "example_models": [
+          "claude-3-7-sonnet",
+          "gemini-1.5-pro",
+          "flash"
+        ]
+      },
+      "active_skills": [
+        "intelligence-scout",
+        "bayesian-cognitive-map",
+        "ceo-team-gene",
+        "evidence-auditor"
+      ],
+      "mandatory_gates": [
+        "GATE_SOURCE_EXISTENCE",
+        "GATE_EPISTEMIC_BIRTH_CERTIFICATE"
+      ],
+      "primary_deliverable": "intelligence_brief.json",
+      "core_metrics": [
+        "Academic Tree Lineage Purity",
+        "Anomalous Signal Level",
+        "Engineer Unofficial Sentiment"
+      ]
+    },
+    "capital_pipeline": {
+      "pipeline_id": "capital_pipeline",
+      "target_domain": "CAPITAL_TRANSACTION",
+      "name_zh": "资本运作、并购整合与交易架构管线",
+      "recommended_model_profile": {
+        "model_role": "Capital Structuring & Strategic Investment Engine",
+        "model_characteristics": "SPAC/IPO资本工具调度、战略投资三部曲建模、制造即投资股权折算法、并购协同度估值",
+        "example_models": [
+          "claude-3-7-sonnet",
+          "gpt-4o",
+          "structured json engine"
+        ]
+      },
+      "active_skills": [
+        "stage-valuation",
+        "modular-innovation",
+        "three-scalings",
+        "perez-capital-cycle",
+        "macro-crisis-immunity"
+      ],
+      "mandatory_gates": [
+        "GATE_VALUATION_DECOUPLING",
+        "GATE_PARAMETER_PROVENANCE_RECALCULATION"
+      ],
+      "primary_deliverable": "capital_strategy_card.json",
+      "core_metrics": [
+        "Manufacturing-as-Investment Equity Ratio",
+        "SPAC Maturation Window",
+        "M&A Integration Synergy"
+      ]
+    },
+    "full_synthesis_pipeline": {
+      "pipeline_id": "full_synthesis_pipeline",
+      "target_domain": "FULL_SYNTHESIS",
+      "name_zh": "1+4+6 全景产业与战略演化母模型统筹管线",
+      "recommended_model_profile": {
+        "model_role": "Multi-Agent Orchestrator (1+4+6 Full System & Master Paradigms)",
+        "model_characteristics": "L1 元认知地图统筹调度，通过 3-Tier 解耦质检与 11 门禁硬性规则终审",
+        "example_models": [
+          "claude-3-7-sonnet",
+          "pro",
+          "hybrid multi-agent"
+        ]
+      },
+      "active_skills": [
+        "meta-cognitive-map",
+        "cognitive-map-bayesian-engine",
+        "stage-valuation",
+        "commercialization-engineering",
+        "business-design",
+        "modular-innovation",
+        "commercialization-timing",
+        "ceo-team-gene",
+        "intelligence-scout",
+        "traditional-upgrade",
+        "ai-industry-analysis",
+        "trend-forecasting",
+        "deductive-native",
+        "winning-strategy",
+        "three-scalings",
+        "evolution-rhyme",
+        "bayesian-cognitive-map",
+        "perez-capital-cycle",
+        "tech-manufacturing-edge",
+        "diffusion-pipeline",
+        "dual-leader-governance",
+        "ecosystem-coordination",
+        "mindset-behavior-shift",
+        "machine-iq-automation",
+        "geopolitical-deconstruction",
+        "global-corporate-citizen",
+        "macro-crisis-immunity"
+      ],
+      "mandatory_gates": [
+        "ALL_11_GATES"
+      ],
+      "primary_deliverable": "8_benchmark_artifacts + audit_scorecard.json/md",
+      "core_metrics": [
+        "All 11 Gates PASS",
+        "Residual Honesty >= 3.0%",
+        "5-Dimensional Decoupled Verdicts"
+      ]
+    }
+  },
+  "tiers": {
+    "tier_1_research_agent": {
+      "role": "Research Agent (研究员)",
+      "mission": "自主调研、检索事实、构建证据链、进行产业拓扑与财务估值建模，输出初版研报与结构化机器数据底盘",
+      "model_provider": "default",
+      "model_name": "claude-3-7-sonnet",
+      "temperature": 0.2,
+      "internal_qa": {
+        "enabled": true,
+        "mode": "self_consistency_check",
+        "description": "研究员内部在提交交付物前的初步完整性自检"
+      },
+      "deliverables": [
+        "report.md",
+        "evidence.jsonl",
+        "assumptions.json",
+        "thesis.json",
+        "monitor.json"
+      ]
+    },
+    "tier_2_evidence_auditor": {
+      "role": "Evidence Auditor (独立审稿人)",
+      "mission": "不信任研究员给出的结论与二手转述，独立提取并重新查验原始来源，定位证据跨度，核验蕴含关系，重算关键数学公式与参数正交性",
+      "model_config": {
+        "use_same_model_as_researcher": true,
+        "default_model": "inherit",
+        "custom_override": {
+          "enabled": true,
+          "provider": "ollama",
+          "model_name": "qwen2.5-benchmark",
+          "api_base": "http://127.0.0.1:22434/v1",
+          "api_key": "ollama",
+          "temperature": 0.0,
+          "timeout_seconds": 90,
+          "max_review_chars": 24000,
+          "comment": "Tier 2 独立审稿人。默认接本地 Ollama (qwen2.5-benchmark, 127.0.0.1:22434)，该模型实测三轮 JSON 全稳且证据引用校验通过。max_review_chars 截断超长网页送审(快照仍绑全文哈希)；本机 Ollama 上下文约32k字符，>24k 留余量。云模型则 api_key 必须为 env:VAR_NAME，禁止明文。"
+        }
+      },
+      "independent_verification_pipeline": {
+        "independent_refetch": true,
+        "source_existence_check": true,
+        "claim_entailment_eval": true,
+        "target_to_result_drift_intercept": true,
+        "epistemic_birth_certificate_audit": true,
+        "parameter_recomputability_check": true,
+        "mechanism_orthogonality_audit": true,
+        "causal_distance_penalty_audit": true,
+        "valuation_decoupling_audit": true
+      }
+    },
+    "tier_3_deterministic_judge": {
+      "role": "Deterministic Judge (确定性规则程序与门禁聚合引擎)",
+      "mission": "基于纯 Python 确定性程序执行硬性门禁规则聚合，彻底消除大模型‘自我感觉良好即打 PASS’的认知幻觉，客观计算最终审核评级",
+      "engine_type": "python_rule_engine",
+      "script_path": "scripts/deterministic_judge.py",
+      "scoring_policy": {
+        "hard_fail_on_critical_gate": true,
+        "critical_gates": [
+          "GATE_SOURCE_EXISTENCE",
+          "GATE_CLAIM_ENTAILMENT_TARGET_RESULT",
+          "GATE_EPISTEMIC_BIRTH_CERTIFICATE",
+          "GATE_PARAMETER_PROVENANCE_RECALCULATION",
+          "GATE_PARAMETER_ORTHOGONALITY_DUAL_MODEL",
+          "GATE_PARAMETER_PREREGISTRATION_BLIND"
+        ],
+        "high_priority_gates": [
+          "GATE_VALIDATION_LEAKAGE",
+          "GATE_GLOBAL_PRECISION_REGEX_AUDIT",
+          "GATE_CAUSAL_DISTANCE_PENALTY",
+          "GATE_VALUATION_DECOUPLING",
+          "GATE_ARTIFACT_ENFORCEMENT"
+        ],
+        "validation_leakage_policy": {
+          "require_holdout_registry": true,
+          "require_timeline_isolation": true,
+          "require_preregistered_criteria": true,
+          "require_dataset_independence": true,
+          "enforce_epistemic_level_downgrade": true
+        },
+        "divergence_policy": {
+          "consistent_max_pct": 20.0,
+          "material_divergence_max_pct": 40.0,
+          "require_divergence_attribution": true,
+          "forbid_single_forecast_on_conflict": true
+        },
+        "max_dual_model_divergence_pct": 20.0,
+        "forbidden_subjective_valuation_terms": [
+          "白马底仓",
+          "安全边际高",
+          "提供看涨期权",
+          "估值洼地",
+          "强烈推荐",
+          "必买标的",
+          "无风险套利",
+          "确定性极强",
+          "已提前预支了",
+          "市场已经预支了"
+        ],
+        "artifact_enforcement_policy": {
+          "required_artifacts": [
+            "parameter_registry.json",
+            "validation_criteria.json",
+            "holdout_registry.json",
+            "model_run_topdown.json",
+            "model_run_bottomup.json",
+            "validation_run.json",
+            "audit_log.jsonl",
+            "evidence.jsonl"
+          ],
+          "require_cryptographic_hashes": true,
+          "require_firewall_permission_check": true,
+          "require_decoupled_verdict": true
+        },
+        "residual_honesty_policy": {
+          "forbid_100_percent_artificial_balance": true,
+          "require_unexplained_residual_acknowledged": true,
+          "min_unexplained_residual_pct": 3.0,
+          "max_unexplained_residual_pct": 15.0
+        }
+      },
+      "verdict_logic": {
+        "PASS": "所有 6 个 Critical Gates 全部为 PASS，且所有 4 个 High Priority Gates 为 PASS",
+        "PARTIAL_PASS": "所有 6 个 Critical Gates 全部为 PASS，但 High Priority Gates 存在带有明确理由的 WARNING / 降温校准",
+        "FAIL": "任一 Critical Gate 为 FAIL，或出现关键证据造假、参数空心无法重算、未在结果前盲态预注册参数锁定、事后调参迎合模型结果等严重违规"
+      }
+    }
+  },
+  "skill_signatures": {
+    "geopolitical-deconstruction": {
+      "name_zh": "大国政治与政党更迭理性穿透框架",
+      "keywords": [
+        "大选",
+        "选举",
+        "口水",
+        "选举口水",
+        "大资本利益",
+        "聪明的互惠",
+        "smart reciprocity",
+        "对等性",
+        "reciprocity",
+        "单边关税",
+        "出口管制",
+        "实体清单",
+        "中美博弈",
+        "产缘政治",
+        "结构性封锁",
+        "法案豁免",
+        "商业豁免",
+        "脱钩"
+      ],
+      "pipeline": "policy_pipeline",
+      "primary_domain": "MACRO_POLICY_REGULATION",
+      "core_axiom": "大资本规则确定性公理；选民激励与聪明的互惠法则；非零和竞合与大资本蓄水池效应"
+    },
+    "global-corporate-citizen": {
+      "name_zh": "西方地方政治与政商博弈落地框架",
+      "keywords": [
+        "德州",
+        "德克萨斯",
+        "学区",
+        "isd",
+        "财产税",
+        "税收减免",
+        "312",
+        "313",
+        "工作权",
+        "企业公民",
+        "海外建厂",
+        "海外选址",
+        "选民交差",
+        "made in america by china",
+        "made by chinese",
+        "工会",
+        "地方政治",
+        "阿肯色",
+        "本土雇佣",
+        "社区赞助"
+      ],
+      "pipeline": "policy_pipeline",
+      "primary_domain": "MACRO_POLICY_REGULATION",
+      "core_axiom": "地方政治独立性公理(All Politics is Local)；西方政商第一定律给官员向选民交差的理由；联邦制政策套利与学区激励"
+    },
+    "macro-crisis-immunity": {
+      "name_zh": "地缘冲突与主权政治避险框架",
+      "keywords": [
+        "地缘冲突",
+        "俄乌",
+        "战争",
+        "黑天鹅",
+        "布朗运动",
+        "避险",
+        "避险资产",
+        "本币债务",
+        "债务危机",
+        "达利奥",
+        "黄金坑",
+        "大资本蓄水池",
+        "央行加息",
+        "央行降息",
+        "加息节奏",
+        "流动性释放",
+        "金融制裁",
+        "资产冻结",
+        "抗审查",
+        "数字资产",
+        "btc"
+      ],
+      "pipeline": "capital_pipeline",
+      "primary_domain": "CAPITAL_TRANSACTION",
+      "core_axiom": "主权国家本币债务韧性(<10%违约)；地缘冲突央行放缓加息与反向流动性释放；短期布朗运动跌出黄金坑，资本必然回归长期硬核生产力与绝对稀缺资产"
+    },
+    "dual-leader-governance": {
+      "name_zh": "双长制治理与微观量产阵痛",
+      "keywords": [
+        "双长制",
+        "首席科学家",
+        "科学家当ceo",
+        "科学家创业",
+        "股权分配",
+        "量产阵痛",
+        "超前信号",
+        "超前量",
+        "治理结构",
+        "控制权",
+        "瓦特",
+        "伯顿"
+      ],
+      "pipeline": "company_pipeline",
+      "primary_domain": "COMPANY_VALUATION",
+      "core_axiom": "瓦特-伯顿双长制公理；量产爬坡阵痛领先财务滞后指标；懂技术的CEO控股掌控权"
+    },
+    "tech-manufacturing-edge": {
+      "name_zh": "科技制造家与敏捷供应链突破",
+      "keywords": [
+        "科技制造家",
+        "工程集成",
+        "小单快反",
+        "柔性制造",
+        "量产爬坡",
+        "交付排队",
+        "产线节拍",
+        "良率爬坡",
+        "敏捷供应链",
+        "制造壁垒"
+      ],
+      "pipeline": "tech_pipeline",
+      "primary_domain": "TECH_FEASIBILITY",
+      "core_axiom": "科技制造家不可替代性公理；工程调优与小单快反敏捷制造；制造即护城河"
+    },
+    "ecosystem-coordination": {
+      "name_zh": "产业生态与长板协作控制力",
+      "keywords": [
+        "长板协作",
+        "新木桶理论",
+        "总包控制点",
+        "反全包",
+        "大包大揽",
+        "积木式创新",
+        "生态繁荣",
+        "纵向整合",
+        "系统总包"
+      ],
+      "pipeline": "industry_pipeline",
+      "primary_domain": "INDUSTRY_TOPOLOGY",
+      "core_axiom": "新木桶理论长板协作公理；反全包反盲目垂直整合；掌握系统总包调通控制点"
+    },
+    "machine-iq-automation": {
+      "name_zh": "人机智商与脑力工作流自动化",
+      "keywords": [
+        "机器智商",
+        "脑力替代",
+        "工作流自动化",
+        "流程自动化",
+        "rpa",
+        "人效倍增",
+        "1人带多机",
+        "高端服务平民化",
+        "任务拆解"
+      ],
+      "pipeline": "tech_pipeline",
+      "primary_domain": "TECH_FEASIBILITY",
+      "core_axiom": "脑力工作流自动化公理；机器智商（人均调动机器算力倍数）；繁重重复流程与创造性裁决解耦"
+    },
+    "mindset-behavior-shift": {
+      "name_zh": "心智迁移三阶段与长雪道服务创新",
+      "keywords": [
+        "行为改变",
+        "习惯改变",
+        "观念改变",
+        "三阶段",
+        "长雪道",
+        "长湿雪道",
+        "文化出海",
+        "服务平民化",
+        "社会渗透"
+      ],
+      "pipeline": "industry_pipeline",
+      "primary_domain": "INDUSTRY_TOPOLOGY",
+      "core_axiom": "社会渗透三阶段演进公理（行为->习惯->观念）；长湿雪道服务化规模平台；包容性普惠体验"
+    },
+    "perez-capital-cycle": {
+      "name_zh": "卡洛塔·佩蕾丝双周期与高利率重估",
+      "keywords": [
+        "卡洛塔",
+        "佩蕾丝",
+        "导入期",
+        "展开期",
+        "高利率",
+        "现金流重估",
+        "低pe陷阱",
+        "价值陷阱",
+        "流动性收紧",
+        "双周期",
+        "泡沫破裂"
+      ],
+      "pipeline": "industry_pipeline",
+      "primary_domain": "INDUSTRY_TOPOLOGY",
+      "core_axiom": "双周期扩散法则；高利率时代现金流重估法则；破除静态低PE陷阱"
+    },
+    "diffusion-pipeline": {
+      "name_zh": "三级扩散时序与软硬解耦",
+      "keywords": [
+        "三级扩散",
+        "硬件-平台-应用",
+        "扩散时序",
+        "云原生",
+        "异构计算",
+        "软硬解耦",
+        "snowflake",
+        "to d"
+      ],
+      "pipeline": "industry_pipeline",
+      "primary_domain": "INDUSTRY_TOPOLOGY",
+      "core_axiom": "硬件->平台->垂直应用三级价值轮动时序；软硬解耦与异构计算协同"
+    },
+    "commercialization-engineering": {
+      "name_zh": "商业化工程调优与死谷穿越",
+      "keywords": [
+        "良品率",
+        "良率",
+        "公差",
+        "工程调优",
+        "量产",
+        "实验室0到1",
+        "1到100万",
+        "mtbf",
+        "执行器",
+        "丝杠",
+        "减速器",
+        "三层产品架构"
+      ],
+      "pipeline": "tech_pipeline",
+      "primary_domain": "TECH_FEASIBILITY",
+      "core_axiom": "工程调优穿越死亡之谷；全产品架构（核心、外在与附加产品）"
+    },
+    "commercialization-timing": {
+      "name_zh": "商业化临界点与莱特定律",
+      "keywords": [
+        "莱特定律",
+        "学习率",
+        "临界点",
+        "硬指标",
+        "降本曲线",
+        "商业化拐点",
+        "成本折半",
+        "虚构第二市场"
+      ],
+      "pipeline": "tech_pipeline",
+      "primary_domain": "TECH_FEASIBILITY",
+      "core_axiom": "莱特定律指数级成本学习曲线；商业硬指标客观临界点检验；识破虚构第二市场伪创新"
+    },
+    "stage-valuation": {
+      "name_zh": "全生命周期五维估值解耦",
+      "keywords": [
+        "估值",
+        "隐含预期",
+        "敏感性压力测试",
+        "全生命周期",
+        "五维评估",
+        "逆向pe",
+        "事实审计",
+        "估值解耦"
+      ],
+      "pipeline": "company_pipeline",
+      "primary_domain": "COMPANY_VALUATION",
+      "core_axiom": "公司经营事实与估值敏感性解耦；逆向隐含预期测算；全生命周期估值演进"
+    },
+    "ceo-team-gene": {
+      "name_zh": "CEO决策力与高管团队基因",
+      "keywords": [
+        "ceo",
+        "空降高管",
+        "存活率",
+        "团队基因",
+        "融资故事",
+        "讲故事能力",
+        "独立决断"
+      ],
+      "pipeline": "company_pipeline",
+      "primary_domain": "COMPANY_VALUATION",
+      "core_axiom": "初创期CEO独立决断与融资叙事；成长期空降高管存活率(>=70%)；科学家与科技企业家界限"
+    },
+    "business-design": {
+      "name_zh": "AIGS服务规模化商业模式设计",
+      "keywords": [
+        "aigs",
+        "raas",
+        "服务化",
+        "订阅制",
+        "按需付费",
+        "解决不知道",
+        "解决做不到",
+        "信任变现",
+        "产品装进服务"
+      ],
+      "pipeline": "company_pipeline",
+      "primary_domain": "COMPANY_VALUATION",
+      "core_axiom": "把产品装进服务；解决不知道（全息数据）与解决做不到（能力增强）；从能力叙事到信任兑现"
+    },
+    "cross-market-institutional-translator": {
+      "name_zh": "跨市场制度转换器",
+      "keywords": [
+        "制度转换",
+        "支付方结构",
+        "劳动力套利",
+        "监管垄断",
+        "中立节点",
+        "水土不服",
+        "本土化适配"
+      ],
+      "pipeline": "policy_pipeline",
+      "primary_domain": "MACRO_POLICY_REGULATION",
+      "core_axiom": "四维制度摩擦过滤器（支付方、劳动力、监管垄断、习惯）；跨法域本土化适配"
+    },
+    "modular-innovation": {
+      "name_zh": "积木式创新与全球化2.0",
+      "keywords": [
+        "制造即投资",
+        "spac",
+        "中立节点",
+        "新加坡",
+        "迪拜",
+        "积木式组装",
+        "轻资产"
+      ],
+      "pipeline": "capital_pipeline",
+      "primary_domain": "CAPITAL_TRANSACTION",
+      "core_axiom": "积木式模块组装创新；制造即投资转股权；全球中立节点架构"
+    },
+    "macro-tech-cycle-diagnostics": {
+      "name_zh": "宏观技术革命周期诊断",
+      "keywords": [
+        "三大规模化",
+        "技术大周期",
+        "安装期",
+        "展开期",
+        "资本工具匹配",
+        "技术拐点"
+      ],
+      "pipeline": "industry_pipeline",
+      "primary_domain": "INDUSTRY_TOPOLOGY",
+      "core_axiom": "技术革命50年佩蕾丝周期定位；三大规模化可扩展性检验"
+    },
+    "meso-industry-topology-control": {
+      "name_zh": "中观产业双链拓扑与控制点",
+      "keywords": [
+        "产业链拓扑",
+        "双链结构",
+        "控制点",
+        "赢家集团",
+        "闸门节点",
+        "暴露卡"
+      ],
+      "pipeline": "industry_pipeline",
+      "primary_domain": "INDUSTRY_TOPOLOGY",
+      "core_axiom": "产业链双链拓扑分层；闸门控制点锁定；赢家集团矩阵映射"
+    },
+    "intelligence-scout": {
+      "name_zh": "寻与伺情报侦察与学术树溯源",
+      "keywords": [
+        "学术树",
+        "师承",
+        "导师",
+        "论文溯源",
+        "知乎",
+        "反常信号",
+        "狗没有叫",
+        "寻与伺",
+        "水下线索"
+      ],
+      "pipeline": "intelligence_pipeline",
+      "primary_domain": "INTELLIGENCE_SCOUTING",
+      "core_axiom": "寻与伺情报侦察；学术师承树谱系溯源；水下反常离群信号挖掘"
+    },
+    "evidence-auditor": {
+      "name_zh": "证据审计员与对抗性核验",
+      "keywords": [
+        "证据审计",
+        "出生证明",
+        "事实核验",
+        "目标结果漂移",
+        "同源污染",
+        "正交性",
+        "因果惩罚"
+      ],
+      "pipeline": "full_synthesis_pipeline",
+      "primary_domain": "FULL_SYNTHESIS",
+      "core_axiom": "独立审稿对抗核验；出生证明与溯源；双正交轴与因果惩罚"
+    },
+    "meta-cognitive-map": {
+      "name_zh": "L1元认知地图与OODA循环",
+      "keywords": [
+        "元认知地图",
+        "1+4+6",
+        "母模型",
+        "ooda",
+        "战略演化",
+        "三位一体"
+      ],
+      "pipeline": "full_synthesis_pipeline",
+      "primary_domain": "FULL_SYNTHESIS",
+      "core_axiom": "三位一体元认知地图结构（架构、法则、初始设定）；OODA动态演化循环"
+    },
+    "cognitive-map-bayesian-engine": {
+      "name_zh": "贝叶斯认知协议主控引擎",
+      "keywords": [
+        "贝叶斯引擎",
+        "5门禁",
+        "先验概率",
+        "后验校准",
+        "异常信号捕捉",
+        "双正交轴"
+      ],
+      "pipeline": "full_synthesis_pipeline",
+      "primary_domain": "FULL_SYNTHESIS",
+      "core_axiom": "5门禁执行协议；先验后验贝叶斯校准；8层认知出生证明"
+    },
+    "bayesian-cognitive-map": {
+      "name_zh": "动态贝叶斯认知校准卡",
+      "keywords": [
+        "认知地图校准",
+        "反常信号",
+        "三步校准",
+        "归因诊断",
+        "狗没有叫"
+      ],
+      "pipeline": "full_synthesis_pipeline",
+      "primary_domain": "FULL_SYNTHESIS",
+      "core_axiom": "三步贝叶斯校准（信号捕捉->归因诊断->地图校准）；捕捉狗没有叫的负信号"
+    },
+    "deductive-native": {
+      "name_zh": "演绎法与数字原住民重构",
+      "keywords": [
+        "数字移民",
+        "数字原住民",
+        "归纳法失效",
+        "正向演绎",
+        "第一性原理重构",
+        "非连续期"
+      ],
+      "pipeline": "company_pipeline",
+      "primary_domain": "COMPANY_VALUATION",
+      "core_axiom": "转折期归纳法失效与第一性正向演绎；数字移民修补 vs 数字原住民原生重构"
+    },
+    "winning-strategy": {
+      "name_zh": "坦克与闪电战破除技术神化",
+      "keywords": [
+        "坦克 vs 闪电战",
+        "坦克与闪电战",
+        "技术先烈",
+        "圈子与层次",
+        "非技术神化",
+        "总包赢家",
+        "降维打击"
+      ],
+      "pipeline": "company_pipeline",
+      "primary_domain": "COMPANY_VALUATION",
+      "core_axiom": "破除技术迷信神化；单点技术发明家往往成为先烈；系统集成与商业总包捕获最大红利"
+    },
+    "traditional-upgrade": {
+      "name_zh": "传统产业升维与闪电战改造",
+      "keywords": [
+        "传统升级",
+        "主客体",
+        "0乘任何数还是0",
+        "闪电战打法",
+        "重构供应链"
+      ],
+      "pipeline": "company_pipeline",
+      "primary_domain": "COMPANY_VALUATION",
+      "core_axiom": "基本盘为1技术为0放大器；闪电战打法重构供应链与销售渠道"
+    },
+    "service-scaling-agent-architect": {
+      "name_zh": "AI Agent服务规模化架构师",
+      "keywords": [
+        "agent架构",
+        "服务规模化",
+        "四大金标准",
+        "人机协作",
+        "cpu+gpu协作",
+        "专属服务"
+      ],
+      "pipeline": "company_pipeline",
+      "primary_domain": "COMPANY_VALUATION",
+      "core_axiom": "服务规模化四大金标准（专家级、个性化、普惠、持续）；人如CPU做裁决，Agent如GPU做并发"
+    },
+    "three-scalings": {
+      "name_zh": "三大规模化跃迁阶梯",
+      "keywords": [
+        "生产规模化",
+        "服务规模化",
+        "创意规模化",
+        "边际成本递增",
+        "平台巨头dna"
+      ],
+      "pipeline": "industry_pipeline",
+      "primary_domain": "INDUSTRY_TOPOLOGY",
+      "core_axiom": "技术经济范式三阶梯（生产规模化->服务规模化->创意规模化）；边际成本测试"
+    },
+    "trend-forecasting": {
+      "name_zh": "10年前瞻与3年战术预测",
+      "keywords": [
+        "10年前瞻",
+        "3年战术",
+        "时间锥",
+        "假认知过滤",
+        "立场偏见",
+        "屁股决定脑袋"
+      ],
+      "pipeline": "industry_pipeline",
+      "primary_domain": "INDUSTRY_TOPOLOGY",
+      "core_axiom": "四层认知拆解（既成事实、收敛趋势、推演假设、情景预测）；立场偏见与媒体炒作过滤"
+    },
+    "tech-impact-trimode-evaluator": {
+      "name_zh": "技术冲击三模式评估器",
+      "keywords": [
+        "产业增强",
+        "产业颠覆",
+        "产业创造",
+        "三模式",
+        "存量赋能"
+      ],
+      "pipeline": "industry_pipeline",
+      "primary_domain": "INDUSTRY_TOPOLOGY",
+      "core_axiom": "新技术冲击三模式（增强存量、颠覆控制点、开辟新蓝海）；差异化应对战略"
+    },
+    "tech-scenario-forecasting-funnel": {
+      "name_zh": "技术情景预测漏斗",
+      "keywords": [
+        "预测漏斗",
+        "前沿信号",
+        "边缘信号",
+        "amy webb",
+        "时间锥反向工程"
+      ],
+      "pipeline": "industry_pipeline",
+      "primary_domain": "INDUSTRY_TOPOLOGY",
+      "core_axiom": "边缘信号收集；工程化阈值过滤；时间锥反向推导战术与战略"
+    },
+    "evolution-rhyme": {
+      "name_zh": "技术-社会-文化演化押韵",
+      "keywords": [
+        "演化押韵",
+        "历史不重复但押韵",
+        "文化滞后",
+        "三方双向选择",
+        "赢家集团制度化"
+      ],
+      "pipeline": "industry_pipeline",
+      "primary_domain": "INDUSTRY_TOPOLOGY",
+      "core_axiom": "技术-社会-文化三方双向选择共演化；文化滞后摩擦阻力；赢家集团制度化巩固"
+    },
+    "ai-industry-analysis": {
+      "name_zh": "AI工业投研提示链编排",
+      "keywords": [
+        "cot工作流",
+        "prompt链",
+        "平均水平同事",
+        "对抗验证",
+        "三层解耦"
+      ],
+      "pipeline": "full_synthesis_pipeline",
+      "primary_domain": "FULL_SYNTHESIS",
+      "core_axiom": "将大模型视作高并发平均水平同事；人类主导框架与对抗验证；三层解耦投研架构"
+    },
+    "micro-enterprise-focus-evaluator": {
+      "name_zh": "微观战略聚焦与兰切斯特法则",
+      "keywords": [
+        "兰切斯特",
+        "局部第一",
+        "战略聚焦",
+        "单点突破",
+        "核心产品"
+      ],
+      "pipeline": "company_pipeline",
+      "primary_domain": "COMPANY_VALUATION",
+      "core_axiom": "兰切斯特法则战略资源聚焦；争夺细分市场局部第一；核心产品、外在产品与附加产品三层架构"
+    }
+  }
+}

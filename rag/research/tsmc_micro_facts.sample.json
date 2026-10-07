@@ -1,0 +1,24 @@
+[
+  {
+    "fact_id": "TSMC-2026Q3-COWOS-YIELD",
+    "source": "TSMC 2026 Q3 Investor Conference / SEMI advanced packaging tracker",
+    "source_url": "https://www.tsmc.com/english/investor-relations",
+    "valid_from": "2026-Q3",
+    "claim": "台积电 CoWoS 先进封装 2026 年实测良品率爬升至 82%，2027 年目标 85%，带动先进封装单位成本随累积产量翻倍下降（Wright 学习率 ~15%）。",
+    "value": 0.82,
+    "unit": "ratio",
+    "keywords": ["封装", "cowos", "良品率", "台积电", "爬坡"],
+    "metrics": {"n_doublings": 4, "learning_rate": 0.15}
+  },
+  {
+    "fact_id": "TSMC-2027-COWOS-CAPACITY",
+    "source": "TSMC 封装产能规划 / industry consortium",
+    "source_url": "https://www.tsmc.com",
+    "valid_from": "2027-Q1",
+    "claim": "CoWoS 产能 2027 年扩至每月 4 万片 12 吋等效，先进封装良品率爬坡支撑主控芯片 BOM 单位成本较 2025 下降 35%。",
+    "value": 0.65,
+    "unit": "ratio",
+    "keywords": ["封装", "产能", "良品率", "bom", "降本", "成本"],
+    "metrics": {"capacity_wafer_per_month": 40000, "bom_cost_reduction": 0.35}
+  }
+]

@@ -1,0 +1,210 @@
+openapi: 3.0.3
+info:
+  title: agent-rag 确定性裁判审计服务 (Deterministic Audit Gateway)
+  version: 1.0.0
+  description: >-
+    agent-rag 确定性裁判引擎的 REST 契约。Java 侧（Spring AI / LangChain4j）作为上游，
+    通过本契约把生成的研报 + evidence 交付给 Python 裁判引擎做合规审计。
+    核心哲学：Fail-Closed。任何 UNVERIFIED/NOT_RUN 都不可作为 PASS 消费。
+    对应项目文档：AGENTS.md、AI_Engineer_Java_Roadmap.md (Phase 3 防幻觉架构)。
+servers:
+  - url: http://localhost:18080/api
+    description: 本地默认（配合 mcp_server.py 或同端口网关）
+tags:
+  - name: audit
+    description: 11 道确定性硬门禁审计
+  - name: calculate
+    description: AST 白名单安全重算（禁 eval）
+  - name: route
+    description: 问题路由 + 技能裁剪 + RAG 公理召回
+
+paths:
+  /health:
+    get:
+      summary: 服务健康探针
+      operationId: health
+      tags: [audit]
+      responses:
+        '200':
+          description: 服务在线
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, example: ok }
+                  service: { type: string, example: agent-rag-mcp }
+
+  /audit:
+    post:
+      summary: 触发 11 道确定性硬门禁审计，返回评分卡与 Fail-Closed 结论
+      operationId: auditReport
+      tags: [audit]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditRequest'
+      responses:
+        '200':
+          description: 审计完成（无论 PASS/FAIL 均 200；verdict 字段为准）
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditResponse'
+        '404':
+          description: benchmark 目录不存在或缺少必需产物（evidence.jsonl 等）
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /calculate:
+    post:
+      summary: 安全四则运算重算（AST 白名单，绝不含 eval）
+      operationId: astCalculate
+      tags: [calculate]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculateRequest'
+      responses:
+        '200':
+          description: 重算结果（ok=false 表示表达式被安全拒绝）
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculateResponse'
+
+  /route:
+    post:
+      summary: 问题路由：管线分类 + 技能裁剪（Occam） + 特训营公理召回
+      operationId: routeProblem
+      tags: [route]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RouteRequest'
+      responses:
+        '200':
+          description: 路由决策
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteResponse'
+
+components:
+  schemas:
+    AuditRequest:
+      type: object
+      required: [benchmark_dir]
+      properties:
+        benchmark_dir:
+          type: string
+          description: 基准目录（需含 evidence.jsonl / report.md / assumptions.json 等 9 件产物）
+          example: reports/nvidia_benchmark
+        config_path:
+          type: string
+          description: 配置路径（可选，默认 config/pipeline_config.json）
+
+    AuditResponse:
+      type: object
+      properties:
+        benchmark_dir: { type: string }
+        overall_verdict:
+          type: string
+          enum: [PASS, PARTIAL_PASS, FAIL]
+          description: Fail-Closed 总判定；UNVERIFIED/NOT_RUN 在聚合中算未过
+        summary:
+          type: object
+          properties:
+            total_gates: { type: integer, example: 11 }
+            critical_gates_passed: { type: integer }
+            high_priority_gates_passed: { type: integer }
+            critical_failures: { type: array, items: { type: string } }
+        report_binding:
+          type: object
+          description: 评分卡绑定 report.md 的 SHA-256
+          properties:
+            path: { type: string }
+            content_hash: { type: string, example: sha256:... }
+        exit_code_equivalent:
+          type: integer
+          enum: [0, 1]
+          description: 0=通过；1=Fail-Closed 拒绝（与 CLI 退出码一致）
+        scorecard_path: { type: string }
+
+    CalculateRequest:
+      type: object
+      required: [expression]
+      properties:
+        expression:
+          type: string
+          description: 仅四则 + 幂 + 一元正负；AST 白名单，超限/注入即拒绝
+          example: 1 - 2**(b)
+        inputs:
+          type: object
+          description: 变量绑定
+          example: { b: -0.23447 }
+      additionalProperties: false
+
+    CalculateResponse:
+      type: object
+      properties:
+        ok: { type: boolean, example: true }
+        result:
+          type: number
+          description: ok=true 时的重算值
+        error:
+          type: string
+          description: ok=false 时的拒绝原因（ValueError/ArithmeticError 语义）
+
+    RouteRequest:
+      type: object
+      required: [query]
+      properties:
+        query: { type: string, example: AI芯片产业双链拓扑与控制点分析 }
+
+    RouteResponse:
+      type: object
+      properties:
+        query: { type: string }
+        category: { type: string, example: INDUSTRY_TOPOLOGY }
+        pipeline_id: { type: string, example: industry_pipeline }
+        confidence: { type: number }
+        primary_skills: { type: array, items: { type: string } }
+        secondary_skills: { type: array, items: { type: string } }
+        pruned_skills: { type: array, items: { type: string } }
+        retrieved_axioms:
+          type: array
+          description: RAG 第二级召回的特训营公理切片（含来源）
+          items:
+            type: object
+            properties:
+              text: { type: string }
+              highlight: { type: string }
+              source: { type: string }
+              topic: { type: string }
+              matched_skills: { type: array, items: { type: string } }
+              matched_keywords: { type: array, items: { type: string } }
+              score: { type: number }
+        mandatory_gates: { type: array, items: { type: string } }
+
+    Error:
+      type: object
+      properties:
+        code: { type: integer }
+        message: { type: string }
+
+x-spring-boot-hints:
+  # 给 Java（Spring AI / LangChain4j）侧的实现提示：见 AI_Engineer_Java_Roadmap.md
+  java-client:
+    - 用 RestClient/WebClient 调 /audit；对 overall_verdict 做强类型枚举映射
+    - FAIL / PARTIAL_PASS 一律按失败处理，最多记录 UNVERIFIED 明细，绝不当作 PASS
+    - /calculate 用于对参数卡做 1-2^b 等公理重算的交叉验证
+    - /route 用于生成研报前先路由 + 注入公理，避免模型自嗨
+    - 失败重试策略：审计非幂等（每轮生成新评分卡），重试前先确认 benchmark_dir 产物完整

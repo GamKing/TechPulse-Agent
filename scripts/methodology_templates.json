@@ -1,0 +1,134 @@
+{
+  "$schema": "methodology-template-schema-v1",
+  "description": "15 个核心方法论强类型模板（applicable_phase / ast_formula_template / falsification_redlines）。Tier 1 引用某公理时必须填充这三个槽位，生成 monitor.json 前线监控清单。",
+  "templates": {
+    "佩蕾丝技术资本周期": {
+      "applicable_phase": "判断新兴产业处于技术资本周期的安装期(导入)还是展开期(部署)：若资本开支高增但出现应用端泡沫信号则视为安装期",
+      "ast_formula_template": "phase = 'EXPANSION' if (utilization > 0.7 and revenue_diverge < 0.15) else 'INSTALLATION'",
+      "falsification_redlines": [
+        "若连续两个季度某赛道基础设施利用率环比下降 >10%，则'进入展开期'判断被推翻",
+        "若资本开支增速连续两个季度 <5% 且无新兴应用接力，则'安装期泡沫后承接'逻辑失效"
+      ]
+    },
+    "兰切斯特法则": {
+      "applicable_phase": "评估挑战者在巨垄断下的突围窗口：存在被忽视细分市场且挑战者可集中优势兵力时适用",
+      "ast_formula_template": "win_probability = 1 if (local_force_ratio >= 3.0) else (local_force_ratio / 3.0)",
+      "falsification_redlines": [
+        "若挑战者放弃集中、开始全线铺开（兵力分散到 <2:1），则'局部突破'逻辑被推翻",
+        "若巨头主动让出并集中兵力反扑该细分，当地兵力比 <2:1 时，突破被抹平"
+      ]
+    },
+    "双链拓扑与控制点": {
+      "applicable_phase": "评估产业链价值分配：某环节独家/寡头供应(卡脖子)且议价权集中时，该环节为控制点",
+      "ast_formula_template": "control_power = 1.0 / max(1, substitute_paths)",
+      "falsification_redlines": [
+        "若出现可替代的新技术/新供应商使 substitute_paths >= 3，'控制点'地位被证伪",
+        "若下游垂直整合自研成功绕过该环节，控制点议价力归零"
+      ]
+    },
+    "瓦特伯顿双长制": {
+      "applicable_phase": "评估科技公司治理：技术与经营权力/股权能否形成制衡时适用",
+      "ast_formula_template": "governance_risk = 1.0 / (balance_degree * equity_binding)",
+      "falsification_redlines": [
+        "若一方绝对控股(>60%)且另一核心方权力 <20%，'双长制平衡'判断失效",
+        "若创始人内斗致战略摇摆或核心人才流失，治理稳健假设被推翻"
+      ]
+    },
+    "积木式创新": {
+      "applicable_phase": "评估中小企业用成熟标准件组合创新、低成本切入的可行性",
+      "ast_formula_template": "time_to_market_delta = modular_ready - custom_build_time",
+      "falsification_redlines": [
+        "若出现必须自研核心件才能差异化(标准件无法满足)时，'积木低成本'优势失效",
+        "若巨头用同款积木+更强渠道碾压，小玩家被挤出"
+      ]
+    },
+    "莱特定律与学习曲线": {
+      "applicable_phase": "预测硬件/制造业随累积产量上升的成本下降斜率",
+      "ast_formula_template": "LR = 1 - 2**b   # b<0；C(Q)=C1*Q^b",
+      "falsification_redlines": [
+        "若良率不升反降 或 产量翻倍但成本未降，'学习曲线'假设失效",
+        "若出现颠覆性新工艺/新材料打破原曲线，模型需重建"
+      ]
+    },
+    "三级扩散时序": {
+      "applicable_phase": "判断技术红利沿硬件-平台-应用的传导节点",
+      "ast_formula_template": "layer_profitability = (hardware_scale, platform_maturity, app_adoption)",
+      "falsification_redlines": [
+        "若扩散停滞(下游不接力、上游过剩)时，'时序推进'假设失效",
+        "若被直接跳过某层级(跳跃式)，原时序模型需修正"
+      ]
+    },
+    "创新地图与时代趋势": {
+      "applicable_phase": "判断当前技术-经济范式位置、识别时代级长趋势",
+      "ast_formula_template": "paradigm_signal = (efficiency_gain * new_species_count) / noise",
+      "falsification_redlines": [
+        "若基础技术成熟度证伪(关键突破被推翻)，'新范式'判断失效",
+        "若新范式长期无法从'效率提升'走向'规模落地'，时代红利被高估"
+      ]
+    },
+    "行为习惯观念三阶段": {
+      "applicable_phase": "评估新技术社会渗透阶段(行为-习惯-观念)以判断渗透率空间",
+      "ast_formula_template": "adoption_phase = 'HABIT' if (retention >= 0.6 and frequency_delta > 0) else ('BEHAVIOR' if trial_rate > sticky else 'NONE')",
+      "falsification_redlines": [
+        "若使用频次/复购长期无提升、停在尝鲜，'向习惯渗透'逻辑被推翻",
+        "若出现更强替代品抢走习惯份额，渗透模型失效"
+      ]
+    },
+    "数字移民与数字原住民": {
+      "applicable_phase": "评估代际差异对新技术采纳速度与终局渗透率的影响",
+      "ast_formula_template": "penetration_cap = native_share * native_retention + immigrant_migrating",
+      "falsification_redlines": [
+        "若新一代(原住民)也出现抵触/转移，'原住民天然采纳'假设失效",
+        "若技术迭代过快使'原住民'优势消失，代际红利消退"
+      ]
+    },
+    "达利奥债务周期与避险": {
+      "applicable_phase": "评估宏观债务周期位置、判断避险配置与系统性风险",
+      "ast_formula_template": "debt_position = (debt_gdp_ratio - debt_ceiling) / debt_ceiling",
+      "falsification_redlines": [
+        "若宽松与需求同时强劲、债务被有效消化(非被动违约)，'去杠杆避险'逻辑需弱化",
+        "若央行兜底改变违约路径，周期模型需修正"
+      ]
+    },
+    "新木桶与生态协调": {
+      "applicable_phase": "评估依赖多方长板协作的生态型业务，判断'缺短板即崩'风险",
+      "ast_formula_template": "ecosystem_risk = 1 if missing_critical_shortboard else (collab_readiness)",
+      "falsification_redlines": [
+        "若关键长板环节被替代或退出致生态失衡，'生态成立'判断失效",
+        "若出现反全包/垂直整合打破协作均衡，原生态模型需重建"
+      ]
+    },
+    "文化滞后与制度转换": {
+      "applicable_phase": "评估新技术与制度/文化错位带来的监管不确定性",
+      "ast_formula_template": "regulation_gap = new_tech_speed - rule_update_speed",
+      "falsification_redlines": [
+        "若制度长期不转换、直接封杀而非让路，'渐进转换'假设失效",
+        "若监管方向转向全面禁止，业务逻辑被推翻"
+      ]
+    },
+    "机器智商与脑力替代": {
+      "applicable_phase": "评估自动化/AI 对人力的替代带来的效率跃升",
+      "ast_formula_template": "efficiency_gain = automation_coverage * replacement_stability",
+      "falsification_redlines": [
+        "若自动化长期无法稳定超越人工(技术未达标)，'替代'逻辑被推迟",
+        "若出现反替代/劳动力重新占优，效率跃升假设受限"
+      ]
+    },
+    "服务规模化": {
+      "applicable_phase": "评估'从卖产品转向卖服务/订阅'能否规模化复利",
+      "ast_formula_template": "arr_growth = base_arr * (1 + net_retention) ** periods",
+      "falsification_redlines": [
+        "若订阅/复购率长期低迷、交付成本失控，'服务规模化'逻辑被证伪",
+        "若出现可免费替代的服务，收费模型受压"
+      ]
+    },
+    "高利率与现金流重估": {
+      "applicable_phase": "评估利率环境对成长股 vs 现金流股估值重估的影响",
+      "ast_formula_template": "valuation_sensitivity = 1 / (risk_free_rate + risk_premium)",
+      "falsification_redlines": [
+        "若高利率下成长股现金流强兑现(盈利超预期)，'杀估值'逻辑被削弱",
+        "若宽松重启但通胀复发，利率模型需重新校准"
+      ]
+    }
+  }
+}
